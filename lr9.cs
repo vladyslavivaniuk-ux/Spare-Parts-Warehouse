@@ -47,6 +47,19 @@ namespace SparePartsWarehouse
                         ShowStatisticsReport(partPrices, count);
                         Pause();
                         break;
+                    case "7":
+                        if (count == 0)
+                        {
+                            Console.WriteLine("Список цін порожній. Нічого видаляти.");
+                        }
+                        else
+                        {
+                            PrintPrices(partPrices, count);
+                            int removeNum = ReadInt(string.Format("Введіть номер запису для видалення (1 - {0}): ", count), 1, count);
+                            RemoveAt(partPrices, ref count, removeNum - 1);
+                        }
+                        Pause();
+                        break;
                     case "0":
                         running = false;
                         Console.WriteLine("До побачення.");
@@ -68,6 +81,7 @@ namespace SparePartsWarehouse
             Console.WriteLine("4 — додати ціну деталі");
             Console.WriteLine("5 — показати всі ціни деталей");
             Console.WriteLine("6 — статистика цін (сума, середня, максимальна)");
+            Console.WriteLine("7 — видалити ціну за номером");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -219,6 +233,22 @@ namespace SparePartsWarehouse
             Console.WriteLine("Загальна сума цін: {0:F2} грн", sum);
             Console.WriteLine("Середня ціна деталі: {0:F2} грн", average);
             Console.WriteLine("Найдорожча деталь: № {0} — {1:F2} грн", maxNumber, maxPrice);
+        }
+
+        static void RemoveAt(double[] prices, ref int count, int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                Console.WriteLine("Помилка: некоректний номер запису.");
+                return;
+            }
+
+            for (int i = index; i < count - 1; i++)
+            {
+                prices[i] = prices[i + 1];
+            }
+            count--;
+            Console.WriteLine("Запис № {0} успішно видалено.", index + 1);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

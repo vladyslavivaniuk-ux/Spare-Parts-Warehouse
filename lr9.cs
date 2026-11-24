@@ -39,6 +39,10 @@ namespace SparePartsWarehouse
                         Console.WriteLine("Поточна кількість записів у Main: {0}", count);
                         Pause();
                         break;
+                    case "5":
+                        PrintPrices(partPrices, count);
+                        Pause();
+                        break;
                     case "0":
                         running = false;
                         Console.WriteLine("До побачення.");
@@ -58,6 +62,7 @@ namespace SparePartsWarehouse
             Console.WriteLine("2 — таблиця вартості партії деталей");
             Console.WriteLine("3 — надходження деталей за категоріями та днями");
             Console.WriteLine("4 — додати ціну деталі");
+            Console.WriteLine("5 — показати всі ціни деталей");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -140,6 +145,22 @@ namespace SparePartsWarehouse
             prices[count] = newPrice;
             count++;
             Console.WriteLine("Ціну успішно додано.");
+        }
+
+        static void PrintPrices(double[] prices, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Список цін деталей порожній.");
+                return;
+            }
+
+            Console.WriteLine("{0,5} | {1,15}", "№", "Ціна (грн)");
+            Console.WriteLine(new string('-', 23));
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine("{0,5} | {1,15:F2}", i + 1, prices[i]);
+            }
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

@@ -48,6 +48,9 @@ namespace SparePartsWarehouse
                         Pause();
                         break;
                     case "5":
+                        DeletePart(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, ref count);
+                        Pause();
+                        break;
                     case "6":
                     case "7":
                     case "8":
@@ -440,6 +443,63 @@ namespace SparePartsWarehouse
                     Console.WriteLine("Редагування скасовано.");
                     break;
             }
+        }
+
+        static void DeletePart(
+            int[] ids,
+            string[] articles,
+            string[] names,
+            int[] categoryIds,
+            int[] quantities,
+            string[] minStocks,
+            double[] prices,
+            string[] shelves,
+            ref int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Список порожній. Немає чого видаляти.");
+                return;
+            }
+
+            PrintAllParts(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, count);
+            Console.WriteLine();
+
+            int targetId = ReadInt("Введіть № деталі для видалення: ", 1, int.MaxValue);
+            int index = FindIndexById(ids, count, targetId);
+
+            if (index == -1)
+            {
+                Console.WriteLine("Запис з №{0} не знайдено.", targetId);
+                return;
+            }
+
+            Console.WriteLine("\nВи збираєтесь видалити запис:");
+            PrintPartHeader();
+            PrintPartRow(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, index);
+
+            Console.Write("\nПідтвердити видалення? (1 — так, 0 — ні): ");
+            string confirm = Console.ReadLine();
+            if (confirm != "1")
+            {
+                Console.WriteLine("Видалення скасовано.");
+                return;
+            }
+
+            for (int i = index; i < count - 1; i++)
+            {
+                ids[i] = ids[i + 1];
+                articles[i] = articles[i + 1];
+                names[i] = names[i + 1];
+                categoryIds[i] = categoryIds[i + 1];
+                quantities[i] = quantities[i + 1];
+                minStocks[i] = minStocks[i + 1];
+                prices[i] = prices[i + 1];
+                shelves[i] = shelves[i + 1];
+            }
+
+            count--;
+            Console.WriteLine("Запис №{0} видалено.", targetId);
         }
 
         static void SeedTestData(

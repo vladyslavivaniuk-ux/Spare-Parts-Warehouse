@@ -43,6 +43,10 @@ namespace SparePartsWarehouse
                         PrintPrices(partPrices, count);
                         Pause();
                         break;
+                    case "6":
+                        ShowStatisticsReport(partPrices, count);
+                        Pause();
+                        break;
                     case "0":
                         running = false;
                         Console.WriteLine("До побачення.");
@@ -63,6 +67,7 @@ namespace SparePartsWarehouse
             Console.WriteLine("3 — надходження деталей за категоріями та днями");
             Console.WriteLine("4 — додати ціну деталі");
             Console.WriteLine("5 — показати всі ціни деталей");
+            Console.WriteLine("6 — статистика цін (сума, середня, максимальна)");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -161,6 +166,59 @@ namespace SparePartsWarehouse
             {
                 Console.WriteLine("{0,5} | {1,15:F2}", i + 1, prices[i]);
             }
+        }
+
+        static void CalculateStatistics(double[] prices, int count, out double sum, out double average)
+        {
+            sum = 0;
+            for (int i = 0; i < count; i++)
+            {
+                sum += prices[i];
+            }
+            average = count > 0 ? sum / count : 0;
+        }
+
+        static void FindMaxPrice(double[] prices, int count, out double maxPrice, out int maxNumber)
+        {
+            if (count == 0)
+            {
+                maxPrice = 0;
+                maxNumber = 0;
+                return;
+            }
+
+            maxPrice = prices[0];
+            maxNumber = 1;
+            for (int i = 1; i < count; i++)
+            {
+                if (prices[i] > maxPrice)
+                {
+                    maxPrice = prices[i];
+                    maxNumber = i + 1;
+                }
+            }
+        }
+
+        static void ShowStatisticsReport(double[] prices, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Немає даних для розрахунку статистики.");
+                return;
+            }
+
+            double sum;
+            double average;
+            CalculateStatistics(prices, count, out sum, out average);
+
+            double maxPrice;
+            int maxNumber;
+            FindMaxPrice(prices, count, out maxPrice, out maxNumber);
+
+            Console.WriteLine("Кількість деталей у списку: {0}", count);
+            Console.WriteLine("Загальна сума цін: {0:F2} грн", sum);
+            Console.WriteLine("Середня ціна деталі: {0:F2} грн", average);
+            Console.WriteLine("Найдорожча деталь: № {0} — {1:F2} грн", maxNumber, maxPrice);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

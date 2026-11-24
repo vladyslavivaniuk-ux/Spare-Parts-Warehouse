@@ -44,6 +44,9 @@ namespace SparePartsWarehouse
                         Pause();
                         break;
                     case "4":
+                        UpdatePart(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, count);
+                        Pause();
+                        break;
                     case "5":
                     case "6":
                     case "7":
@@ -365,6 +368,77 @@ namespace SparePartsWarehouse
             else
             {
                 Console.WriteLine("\nЗнайдено записів: {0}.", foundCount);
+            }
+        }
+
+        static void UpdatePart(
+            int[] ids,
+            string[] articles,
+            string[] names,
+            int[] categoryIds,
+            int[] quantities,
+            string[] minStocks,
+            double[] prices,
+            string[] shelves,
+            int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Список порожній. Немає чого змінювати.");
+                return;
+            }
+
+            PrintAllParts(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, count);
+            Console.WriteLine();
+
+            int targetId = ReadInt("Введіть № деталі для редагування: ", 1, int.MaxValue);
+            int index = FindIndexById(ids, count, targetId);
+
+            if (index == -1)
+            {
+                Console.WriteLine("Запис з №{0} не знайдено.", targetId);
+                return;
+            }
+
+            Console.WriteLine("\nОбраний запис:");
+            PrintPartHeader();
+            PrintPartRow(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, index);
+
+            Console.WriteLine("\nЩо саме змінити?");
+            Console.WriteLine("1 — кількість на складі");
+            Console.WriteLine("2 — ціну");
+            Console.WriteLine("3 — мінімальний залишок");
+            Console.WriteLine("4 — полицю зберігання");
+            Console.WriteLine("5 — найменування");
+            Console.WriteLine("0 — скасувати");
+
+            int fieldChoice = ReadInt("Ваш вибір: ", 0, 5);
+            switch (fieldChoice)
+            {
+                case 1:
+                    quantities[index] = ReadInt("Нова кількість на складі (0 - 100000): ", 0, 100000);
+                    Console.WriteLine("Кількість оновлено.");
+                    break;
+                case 2:
+                    prices[index] = ReadDouble("Нова ціна (грн, 0,01 - 1000000): ", 0.01, 1000000.0);
+                    Console.WriteLine("Ціну оновлено.");
+                    break;
+                case 3:
+                    int newMin = ReadInt("Новий мінімальний залишок (0 - 100000): ", 0, 100000);
+                    minStocks[index] = newMin.ToString();
+                    Console.WriteLine("Мінімальний залишок оновлено.");
+                    break;
+                case 4:
+                    shelves[index] = ReadText("Нова полиця зберігання: ", 1);
+                    Console.WriteLine("Полицю оновлено.");
+                    break;
+                case 5:
+                    names[index] = ReadText("Нове найменування: ", 2);
+                    Console.WriteLine("Найменування оновлено.");
+                    break;
+                case 0:
+                    Console.WriteLine("Редагування скасовано.");
+                    break;
             }
         }
 

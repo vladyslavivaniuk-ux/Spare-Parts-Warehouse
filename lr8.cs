@@ -60,6 +60,50 @@ namespace SparePartsWarehouse
             Console.WriteLine("Підсумкова величина: позиції, яких менше за мінімальний залишок");
         }
 
+        static double ReadDouble(string prompt, double min, double max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                double value;
+                if (!double.TryParse(Console.ReadLine(), out value))
+                {
+                    Console.WriteLine("Помилка: введіть коректне дійсне число.");
+                    continue;
+                }
+
+                if (value < min || value > max)
+                {
+                    Console.WriteLine("Помилка: число має бути в межах від {0} до {1}.", min, max);
+                    continue;
+                }
+
+                return value;
+            }
+        }
+
+        static int ReadInt(string prompt, int min, int max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                int value;
+                if (!int.TryParse(Console.ReadLine(), out value))
+                {
+                    Console.WriteLine("Помилка: введіть коректне ціле число.");
+                    continue;
+                }
+
+                if (value < min || value > max)
+                {
+                    Console.WriteLine("Помилка: число має бути в межах від {0} до {1}.", min, max);
+                    continue;
+                }
+
+                return value;
+            }
+        }
+
         static void ShowCostTable()
         {
             Console.WriteLine("--- Табуляція вартості запчастин за вагою партії ---");

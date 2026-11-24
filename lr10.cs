@@ -218,7 +218,7 @@ namespace SparePartsWarehouse
                 int minStockValue;
                 if (int.TryParse(minStocks[i], out minStockValue))
                 {
-                    if (quantities[i] > minStockValue)
+                    if (quantities[i] < minStockValue)
                     {
                         lowStockCount++;
                     }

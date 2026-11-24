@@ -46,8 +46,11 @@ namespace SparePartsWarehouse
                     case "7":
                     case "8":
                     case "9":
-                    case "10":
                         Console.WriteLine("Поки не зроблено.");
+                        Pause();
+                        break;
+                    case "10":
+                        SeedTestData(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, ref count, ref nextId, Capacity);
                         Pause();
                         break;
                     case "11":
@@ -266,6 +269,53 @@ namespace SparePartsWarehouse
 
             int lowStock = CountLowStockParts(quantities, minStocks, count);
             Console.WriteLine("\nЗаписів: {0}. Позицій, яких менше за мінімальний залишок: {1}.", count, lowStock);
+        }
+
+        static void SeedTestData(
+            int[] ids,
+            string[] articles,
+            string[] names,
+            int[] categoryIds,
+            int[] quantities,
+            string[] minStocks,
+            double[] prices,
+            string[] shelves,
+            ref int count,
+            ref int nextId,
+            int capacity)
+        {
+            string[] demoArticles = { "FLT-102", "BRK-405", "SPK-019", "BLT-880", "OIL-530", "SHK-214" };
+            string[] demoNames = { "Фільтр масляний", "Колодки гальмівні", "Свічка запалювання", "Ремінь ГРМ", "Олива синтетична 5W-30", "Амортизатор передній" };
+            int[] demoCats = { 1, 2, 3, 1, 4, 5 };
+            int[] demoQuantities = { 4, 15, 3, 12, 6, 2 };
+            string[] demoMinStocks = { "10", "8", "12", "5", "10", "4" };
+            double[] demoPrices = { 320.00, 1450.50, 210.00, 980.00, 1650.00, 2890.00 };
+            string[] demoShelves = { "A-01", "B-04", "A-03", "C-11", "D-02", "B-09" };
+
+            int added = 0;
+            for (int i = 0; i < demoArticles.Length; i++)
+            {
+                if (count >= capacity)
+                {
+                    Console.WriteLine("Сховище заповнене. Додано лише {0} тестових записів.", added);
+                    return;
+                }
+
+                ids[count] = nextId;
+                articles[count] = demoArticles[i];
+                names[count] = demoNames[i];
+                categoryIds[count] = demoCats[i];
+                quantities[count] = demoQuantities[i];
+                minStocks[count] = demoMinStocks[i];
+                prices[count] = demoPrices[i];
+                shelves[count] = demoShelves[i];
+
+                count++;
+                nextId++;
+                added++;
+            }
+
+            Console.WriteLine("Додано {0} тестових записів про запчастини.", added);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

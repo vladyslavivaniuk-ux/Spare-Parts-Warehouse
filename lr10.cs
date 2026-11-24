@@ -32,7 +32,7 @@ namespace SparePartsWarehouse
                 switch (choice)
                 {
                     case "1":
-                        Console.WriteLine("Поки не зроблено.");
+                        PrintAllParts(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, count);
                         Pause();
                         break;
                     case "2":
@@ -203,6 +203,45 @@ namespace SparePartsWarehouse
             nextId++;
 
             Console.WriteLine("\nДодано деталь №{0}.", ids[count - 1]);
+        }
+
+        static void PrintAllParts(
+            int[] ids,
+            string[] articles,
+            string[] names,
+            int[] categoryIds,
+            int[] quantities,
+            string[] minStocks,
+            double[] prices,
+            string[] shelves,
+            int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Записів поки немає.");
+                return;
+            }
+
+            Console.WriteLine(
+                "{0,4} | {1,-12} | {2,-24} | {3,5} | {4,9} | {5,10} | {6,11} | {7,-8}",
+                "№", "Артикул", "Найменування", "Кат.", "Кількість", "Мін. зал.", "Ціна (грн)", "Полиця");
+            Console.WriteLine(new string('-', 104));
+
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine(
+                    "{0,4} | {1,-12} | {2,-24} | {3,5} | {4,9} | {5,10} | {6,11:F2} | {7,-8}",
+                    ids[i],
+                    articles[i],
+                    names[i],
+                    categoryIds[i],
+                    quantities[i],
+                    minStocks[i],
+                    prices[i],
+                    shelves[i]);
+            }
+
+            Console.WriteLine("\nЗаписів: {0}.", count);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

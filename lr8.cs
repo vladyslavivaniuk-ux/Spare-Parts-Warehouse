@@ -104,6 +104,11 @@ namespace SparePartsWarehouse
             }
         }
 
+        static double CalculateBatchCost(double weight, double pricePerKg)
+        {
+            return weight * pricePerKg;
+        }
+
         static void ShowCostTable()
         {
             Console.WriteLine("--- Табуляція вартості запчастин за вагою партії ---");
@@ -114,7 +119,7 @@ namespace SparePartsWarehouse
 
             for (double weight = 0.5; weight <= 5.0 + 1e-9; weight += 0.5)
             {
-                double totalCost = weight * pricePerKg;
+                double totalCost = CalculateBatchCost(weight, pricePerKg);
                 Console.WriteLine("{0,10:F1} | {1,15:F2}", weight, totalCost);
             }
         }

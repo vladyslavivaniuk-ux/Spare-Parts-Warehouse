@@ -20,7 +20,7 @@ namespace SparePartsWarehouse
                 {
                     case "1": ShowAbout(); Pause(); break;
                     case "2": RunCostTabulation(); Pause(); break;
-                    case "3": ShowSupplyTable(); Pause(); break;
+                    case "3": RunSupplyReport(); Pause(); break;
                     case "0": running = false; Console.WriteLine("До побачення."); break;
                     default: Console.WriteLine("Немає такого пункту. Спробуйте ще раз."); Pause(); break;
                 }
@@ -134,27 +134,18 @@ namespace SparePartsWarehouse
             }
         }
 
-        static void ShowSupplyTable()
+        static void RunSupplyReport()
         {
             Console.WriteLine("--- Таблиця надходження запчастин (категорії / дні) ---\n");
-
-            int rows;
-            Console.Write("Введіть кількість категорій запчастин: ");
-            if (!int.TryParse(Console.ReadLine(), out rows) || rows <= 0)
-            {
-                Console.WriteLine("Помилка: введіть ціле додатне число.");
-                return;
-            }
-
-            int cols;
-            Console.Write("Введіть кількість днів поставки: ");
-            if (!int.TryParse(Console.ReadLine(), out cols) || cols <= 0)
-            {
-                Console.WriteLine("Помилка: введіть ціле додатне число.");
-                return;
-            }
+            int rows = ReadInt("Введіть кількість категорій запчастин (1 - 20): ", 1, 20);
+            int cols = ReadInt("Введіть кількість днів поставки (1 - 14): ", 1, 14);
 
             Console.WriteLine();
+            PrintSupplyTable(rows, cols);
+        }
+
+        static void PrintSupplyTable(int rows, int cols)
+        {
             int grandTotal = 0;
             int[] colTotals = new int[cols];
 

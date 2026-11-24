@@ -19,7 +19,7 @@ namespace SparePartsWarehouse
                 switch (choice)
                 {
                     case "1": ShowAbout(); Pause(); break;
-                    case "2": ShowCostTable(); Pause(); break;
+                    case "2": RunCostTabulation(); Pause(); break;
                     case "3": ShowSupplyTable(); Pause(); break;
                     case "0": running = false; Console.WriteLine("До побачення."); break;
                     default: Console.WriteLine("Немає такого пункту. Спробуйте ще раз."); Pause(); break;
@@ -109,15 +109,25 @@ namespace SparePartsWarehouse
             return weight * pricePerKg;
         }
 
-        static void ShowCostTable()
+        static void RunCostTabulation()
         {
-            Console.WriteLine("--- Табуляція вартості запчастин за вагою партії ---");
+            Console.WriteLine("--- Налаштування табуляції вартості партії деталей ---");
+            double from = ReadDouble("Введіть початкову вагу в кг (0,1 - 100): ", 0.1, 100.0);
+            double to = ReadDouble(string.Format("Введіть кінцеву вагу в кг ({0} - 500): ", from), from, 500.0);
+            double step = ReadDouble("Введіть крок ваги в кг (0,1 - 50): ", 0.1, 50.0);
+
+            Console.WriteLine();
+            PrintCostTable(from, to, step);
+        }
+
+        static void PrintCostTable(double from, double to, double step)
+        {
             double pricePerKg = 245.50;
 
             Console.WriteLine("{0,10} | {1,15}", "Вага (кг)", "Вартість (грн)");
             Console.WriteLine(new string('-', 28));
 
-            for (double weight = 0.5; weight <= 5.0 + 1e-9; weight += 0.5)
+            for (double weight = from; weight <= to + 1e-9; weight += step)
             {
                 double totalCost = CalculateBatchCost(weight, pricePerKg);
                 Console.WriteLine("{0,10:F1} | {1,15:F2}", weight, totalCost);

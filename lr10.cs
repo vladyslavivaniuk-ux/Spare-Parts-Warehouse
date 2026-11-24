@@ -205,6 +205,29 @@ namespace SparePartsWarehouse
             Console.WriteLine("\nДодано деталь №{0}.", ids[count - 1]);
         }
 
+        static int CountLowStockParts(int[] quantities, string[] minStocks, int count)
+        {
+            if (count == 0)
+            {
+                return 0;
+            }
+
+            int lowStockCount = 0;
+            for (int i = 0; i < count; i++)
+            {
+                int minStockValue;
+                if (int.TryParse(minStocks[i], out minStockValue))
+                {
+                    if (quantities[i] > minStockValue)
+                    {
+                        lowStockCount++;
+                    }
+                }
+            }
+
+            return lowStockCount;
+        }
+
         static void PrintAllParts(
             int[] ids,
             string[] articles,
@@ -241,7 +264,8 @@ namespace SparePartsWarehouse
                     shelves[i]);
             }
 
-            Console.WriteLine("\nЗаписів: {0}.", count);
+            int lowStock = CountLowStockParts(quantities, minStocks, count);
+            Console.WriteLine("\nЗаписів: {0}. Позицій, яких менше за мінімальний залишок: {1}.", count, lowStock);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

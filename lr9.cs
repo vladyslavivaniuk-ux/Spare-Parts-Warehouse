@@ -60,6 +60,10 @@ namespace SparePartsWarehouse
                         }
                         Pause();
                         break;
+                    case "8":
+                        RunReferenceExperiment();
+                        Pause();
+                        break;
                     case "0":
                         running = false;
                         Console.WriteLine("До побачення.");
@@ -82,6 +86,7 @@ namespace SparePartsWarehouse
             Console.WriteLine("5 — показати всі ціни деталей");
             Console.WriteLine("6 — статистика цін (сума, середня, максимальна)");
             Console.WriteLine("7 — видалити ціну за номером");
+            Console.WriteLine("8 — дослід: передавання за значенням і за посиланням");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -249,6 +254,34 @@ namespace SparePartsWarehouse
             }
             count--;
             Console.WriteLine("Запис № {0} успішно видалено.", index + 1);
+        }
+
+        static void TryModifyValue(int number)
+        {
+            number = number + 500;
+        }
+
+        static void ModifyArrayElement(double[] array)
+        {
+            if (array.Length > 0)
+            {
+                array[0] = array[0] + 500;
+            }
+        }
+
+        static void RunReferenceExperiment()
+        {
+            Console.WriteLine("--- Дослід: значимий тип (int) та посилальний тип (double[]) ---");
+
+            int partCount = 10;
+            Console.WriteLine("До виклику TryModifyValue(partCount): partCount = {0}", partCount);
+            TryModifyValue(partCount);
+            Console.WriteLine("Після виклику TryModifyValue(partCount): partCount = {0} (не змінилося)\n", partCount);
+
+            double[] testPrices = { 120.0, 250.0, 380.0 };
+            Console.WriteLine("До виклику ModifyArrayElement(testPrices): testPrices[0] = {0:F2}", testPrices[0]);
+            ModifyArrayElement(testPrices);
+            Console.WriteLine("Після виклику ModifyArrayElement(testPrices): testPrices[0] = {0:F2} (змінилося)", testPrices[0]);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)

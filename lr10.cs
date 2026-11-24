@@ -32,7 +32,13 @@ namespace SparePartsWarehouse
                 switch (choice)
                 {
                     case "1":
+                        Console.WriteLine("Поки не зроблено.");
+                        Pause();
+                        break;
                     case "2":
+                        AddPart(ids, articles, names, categoryIds, quantities, minStocks, prices, shelves, ref count, ref nextId, Capacity);
+                        Pause();
+                        break;
                     case "3":
                     case "4":
                     case "5":
@@ -154,6 +160,49 @@ namespace SparePartsWarehouse
 
                 Console.WriteLine("Помилка: введіть число від {0} до {1}.", min, max);
             }
+        }
+
+        static void AddPart(
+            int[] ids,
+            string[] articles,
+            string[] names,
+            int[] categoryIds,
+            int[] quantities,
+            string[] minStocks,
+            double[] prices,
+            string[] shelves,
+            ref int count,
+            ref int nextId,
+            int capacity)
+        {
+            if (count >= capacity)
+            {
+                Console.WriteLine("Сховище заповнене, видаліть щось зайве.");
+                return;
+            }
+
+            Console.WriteLine("--- Додавання нової деталі ---");
+            string article = ReadText("Артикул (наприклад, BRK-001): ", 2);
+            string name = ReadText("Найменування деталі: ", 2);
+            int categoryId = ReadInt("Код категорії з довідника (1 - 5): ", 1, 5);
+            int quantity = ReadInt("Кількість на складі (0 - 100000): ", 0, 100000);
+            int minStockNum = ReadInt("Мінімальний залишок (0 - 100000): ", 0, 100000);
+            double price = ReadDouble("Ціна за одиницю (грн, 0,01 - 1000000): ", 0.01, 1000000.0);
+            string shelf = ReadText("Полиця зберігання (наприклад, A-12): ", 1);
+
+            ids[count] = nextId;
+            articles[count] = article;
+            names[count] = name;
+            categoryIds[count] = categoryId;
+            quantities[count] = quantity;
+            minStocks[count] = minStockNum.ToString();
+            prices[count] = price;
+            shelves[count] = shelf;
+
+            count++;
+            nextId++;
+
+            Console.WriteLine("\nДодано деталь №{0}.", ids[count - 1]);
         }
 
         static double CalculateBatchCost(double weight, double pricePerKg)
